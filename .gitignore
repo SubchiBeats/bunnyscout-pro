@@ -1,0 +1,17 @@
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*~
+.idea/
+.vscode/
+
+# Logs / temp
+*.log
+*.tmp
+
+# Local backups exported by the app (don't commit personal data)
+bunnyscout-backup-*.json
+bunnyscout-encrypted-*.bunny
+bunnyscout-extension-backup-*.json

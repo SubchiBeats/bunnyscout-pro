@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BunnyScout</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <main class="popup-shell">
+    <header class="hero">
+      <div class="bunny" aria-hidden="true"><span></span></div>
+      <div>
+        <p class="eyebrow">BunnyScout</p>
+        <h1>Clip + autofill</h1>
+      </div>
+    </header>
+
+    <section class="stats">
+      <div><strong id="clipCount">0</strong><span>clips</span></div>
+      <div><strong id="profileScore">0%</strong><span>profile ready</span></div>
+    </section>
+
+    <section class="panel">
+      <button class="primary" id="clipBtn" type="button">Clip this job</button>
+      <button id="previewBtn" type="button">Preview autofill fields</button>
+      <button id="fillBtn" type="button">Autofill page</button>
+    </section>
+
+    <section class="panel compact">
+      <label>
+        App URL
+        <input id="appUrl" placeholder="https://your-site.netlify.app/index.html" />
+      </label>
+      <div class="row">
+        <button id="openAppBtn" type="button">Open app</button>
+        <button id="copyClipBtn" type="button">Copy latest clip</button>
+      </div>
+    </section>
+
+    <section id="result" class="result" aria-live="polite">Ready when you are.</section>
+
+    <footer>
+      <button id="dashboardBtn" type="button">Profile + saved clips</button>
+    </footer>
+  </main>
+  <script src="popup.js"></script>
+</body>
+</html>

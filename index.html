@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#8d5cf6" />
+    <meta name="description" content="BunnyScout is a local-first job search command center for tracking applications, tailoring resume prompts, salary planning, follow-ups, and recruiter outreach." />
+    <title>BunnyScout Job Search HQ</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="apple-touch-icon" href="favicon.svg" />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Primary navigation">
+        <div class="brand-block">
+          <div class="bunny-logo" aria-hidden="true">
+            <div class="ear ear-left"></div>
+            <div class="ear ear-right"></div>
+            <div class="head">
+              <span class="eye eye-left"></span>
+              <span class="eye eye-right"></span>
+              <span class="nose"></span>
+              <span class="smile"></span>
+            </div>
+          </div>
+          <div>
+            <p class="eyebrow">local-first</p>
+            <h1>BunnyScout</h1>
+          </div>
+        </div>
+
+        <nav class="nav-list">
+          <button class="nav-btn active" data-view="dashboard">Dashboard</button>
+          <button class="nav-btn" data-view="jobs">Job Tracker</button>
+          <button class="nav-btn" data-view="add">Add / Analyze Job</button>
+          <button class="nav-btn" data-view="prompt">Resume Prompt Lab</button>
+          <button class="nav-btn" data-view="salary">Earnings Planner</button>
+          <button class="nav-btn" data-view="profile">Profile + Vault</button>
+          <button class="nav-btn" data-view="recruiters">Recruiter Map</button>
+          <button class="nav-btn" data-view="settings">Backup + Settings</button>
+        </nav>
+
+        <div class="privacy-card">
+          <strong>Private by default</strong>
+          <span>Your data stays in this browser unless you export it.</span>
+        </div>
+      </aside>
+
+      <main class="main-panel">
+        <header class="topbar">
+          <button class="mobile-menu" type="button" aria-label="Open navigation">☰</button>
+          <div class="topbar-heading">
+            <p class="eyebrow">job hunt command center</p>
+            <h2 id="viewTitle">Dashboard</h2>
+          </div>
+          <div class="topbar-right">
+            <div class="top-actions">
+              <button class="ghost-btn" id="seedDemoBtn" type="button">Load sample</button>
+              <button class="primary-btn" data-view-target="add" type="button">+ Add job</button>
+            </div>
+            <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark mode" title="Toggle dark mode">🌙</button>
+          </div>
+        </header>
+
+        <section class="view active" id="dashboardView" aria-labelledby="dashboardHeading">
+          <div class="hero-card">
+            <div>
+              <p class="eyebrow">today's mission</p>
+              <h3 id="dashboardHeading">Apply smarter, follow up faster, stay sane.</h3>
+              <p>BunnyScout keeps your job search organized without sending your resume, job descriptions, notes, or personal details to a server.</p>
+              <div class="hero-actions">
+                <button class="primary-btn" data-view-target="add" type="button">Analyze a job description</button>
+                <button class="secondary-btn" data-view-target="prompt" type="button">Generate tailoring prompt</button>
+              </div>
+            </div>
+            <div class="bunny-hero" aria-hidden="true">
+              <div class="moon"></div>
+              <div class="bunny-bounce">
+                <div class="ear ear-left"></div>
+                <div class="ear ear-right"></div>
+                <div class="head"><span class="eye eye-left"></span><span class="eye eye-right"></span><span class="nose"></span><span class="smile"></span></div>
+                <div class="body"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="metric-grid" id="metricGrid"></div>
+
+          <div class="grid two-col">
+            <article class="card">
+              <div class="card-head">
+                <div>
+                  <p class="eyebrow">pipeline</p>
+                  <h3>Status breakdown</h3>
+                </div>
+                <button class="tiny-btn" data-view-target="jobs" type="button">Open tracker</button>
+              </div>
+              <div id="pipelineChart" class="pipeline-chart"></div>
+            </article>
+            <article class="card">
+              <div class="card-head">
+                <div>
+                  <p class="eyebrow">action queue</p>
+                  <h3>Follow-ups and likely ghosts</h3>
+                </div>
+              </div>
+              <div id="actionQueue" class="stack-list"></div>
+            </article>
+          </div>
+
+          <article class="card">
+            <div class="card-head">
+              <div>
+                <p class="eyebrow">recent jobs</p>
+                <h3>Latest saved roles</h3>
+              </div>
+            </div>
+            <div id="recentJobs" class="job-card-list"></div>
+          </article>
+        </section>
+
+        <section class="view" id="jobsView" aria-labelledby="jobsHeading">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">kanban + table</p>
+              <h3 id="jobsHeading">Job Tracker</h3>
+              <p>Track the roles, which resume you used, when to follow up, and what happened next.</p>
+            </div>
+            <button class="primary-btn" data-view-target="add" type="button">Add job</button>
+          </div>
+          <div class="toolbar">
+            <label class="search-label">
+              <span>Search</span>
+              <input id="jobSearch" type="search" placeholder="Company, title, keyword..." />
+            </label>
+            <label>
+              <span>Status</span>
+              <select id="statusFilter"></select>
+            </label>
+            <label>
+              <span>Sort</span>
+              <select id="sortJobs">
+                <option value="newest">Newest saved</option>
+                <option value="followup">Follow-up due</option>
+                <option value="match">Best match</option>
+                <option value="salary">Highest salary</option>
+                <option value="company">Company A-Z</option>
+              </select>
+            </label>
+          </div>
+          <div id="jobsList" class="job-card-list"></div>
+        </section>
+
+        <section class="view" id="addView" aria-labelledby="addHeading">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">clip + analyze</p>
+              <h3 id="addHeading">Add / Analyze Job</h3>
+              <p>Paste a job description and BunnyScout will extract salary, keywords, likely fit, and a follow-up date.</p>
+            </div>
+          </div>
+          <article class="card extension-import-card">
+            <div class="card-head">
+              <div>
+                <p class="eyebrow">browser extension bridge</p>
+                <h3>Import a clipped job</h3>
+                <p>Use the Chrome/Edge extension to clip a job page, then paste the BunnyScout JSON here to fill this form.</p>
+              </div>
+              <div class="chip-row">
+                <button class="tiny-btn" id="pasteClipBtn" type="button">Paste from clipboard</button>
+                <button class="tiny-btn" id="importClipBtn" type="button">Import clip</button>
+              </div>
+            </div>
+            <label>Extension clip JSON<textarea id="clipImportInput" rows="4" placeholder="Paste BunnyScoutClip or BunnyScoutClipBundle JSON from the extension..."></textarea></label>
+            <p class="security-note">The extension and this app do not share a cloud account. This keeps your job-search data private, but means clips move through clipboard, hash import, or backup files.</p>
+          </article>
+
+          <form id="jobForm" class="card form-grid">
+            <div class="field-pair">
+              <label>Job title<input name="title" required placeholder="Health Communications Specialist" /></label>
+              <label>Company<input name="company" required placeholder="Agency, nonprofit, startup..." /></label>
+            </div>
+            <div class="field-pair">
+              <label>Location<input name="location" placeholder="Seattle, Remote, DC..." /></label>
+              <label>Industry<input name="industry" placeholder="Government, health, marketing, tech..." /></label>
+            </div>
+            <div class="field-pair">
+              <label>Job URL<input name="url" type="url" placeholder="https://..." /></label>
+              <label>Source<input name="source" placeholder="LinkedIn, Indeed, recruiter..." /></label>
+            </div>
+            <div class="field-pair">
+              <label>Salary minimum<input name="salaryMin" inputmode="numeric" placeholder="70000" /></label>
+              <label>Salary maximum<input name="salaryMax" inputmode="numeric" placeholder="95000" /></label>
+            </div>
+            <div class="field-pair">
+              <label>Status
+                <select name="status" id="newJobStatus"></select>
+              </label>
+              <label>Excitement
+                <select name="excitement">
+                  <option value="3">3 - neutral</option>
+                  <option value="5">5 - dream role</option>
+                  <option value="4">4 - strong fit</option>
+                  <option value="2">2 - maybe</option>
+                  <option value="1">1 - backup</option>
+                </select>
+              </label>
+            </div>
+            <label>Job description<textarea name="jd" id="jdInput" rows="12" placeholder="Paste the full job description here..."></textarea></label>
+            <label>Notes<textarea name="notes" rows="4" placeholder="Recruiter notes, concerns, referral ideas, etc."></textarea></label>
+            <div class="form-actions">
+              <button class="secondary-btn" id="analyzeBtn" type="button">Analyze description</button>
+              <button class="primary-btn" type="submit">Save job</button>
+            </div>
+          </form>
+          <div id="analysisResults" class="analysis-results"></div>
+        </section>
+
+        <section class="view" id="promptView" aria-labelledby="promptHeading">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">chatgpt / claude helper</p>
+              <h3 id="promptHeading">Resume Prompt Lab</h3>
+              <p>Pick a saved job and generate a resume tailoring prompt that tells AI exactly what to do without inventing experience.</p>
+            </div>
+          </div>
+          <div class="grid two-col">
+            <article class="card">
+              <label>Choose job<select id="promptJobSelect"></select></label>
+              <label>Prompt style
+                <select id="promptStyle">
+                  <option value="resume">Tailor resume bullets</option>
+                  <option value="cover">Cover letter</option>
+                  <option value="ats">ATS keyword gap analysis</option>
+                  <option value="interview">Interview prep</option>
+                  <option value="linkedin">LinkedIn recruiter message</option>
+                </select>
+              </label>
+              <label>Strictness
+                <select id="promptStrictness">
+                  <option value="strict">Strict: never fabricate</option>
+                  <option value="balanced">Balanced: improve phrasing only</option>
+                  <option value="bold">Bold: stronger positioning, still truthful</option>
+                </select>
+              </label>
+              <button class="primary-btn full" id="generatePromptBtn" type="button">Generate prompt</button>
+            </article>
+            <article class="card">
+              <div class="card-head">
+                <div>
+                  <p class="eyebrow">output</p>
+                  <h3>Copy this into ChatGPT or Claude</h3>
+                </div>
+                <button class="tiny-btn" id="copyPromptBtn" type="button">Copy</button>
+              </div>
+              <textarea id="promptOutput" class="prompt-output" rows="18" readonly></textarea>
+            </article>
+          </div>
+        </section>
+
+        <section class="view" id="salaryView" aria-labelledby="salaryHeading">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">earnings potential</p>
+              <h3 id="salaryHeading">Earnings Planner</h3>
+              <p>Estimate bands by role family, experience, industry, and location multiplier. Use official salary sources before negotiating.</p>
+            </div>
+          </div>
+          <div class="grid two-col">
+            <article class="card form-grid">
+              <label>Role family<select id="salaryRole"></select></label>
+              <label>Years of relevant experience<input id="salaryYears" type="range" min="0" max="20" step="1" value="3" /><span id="salaryYearsLabel" class="range-readout">3 years</span></label>
+              <label>Market / location multiplier<select id="salaryMarket"><option value="0.9">Lower-cost market · 0.90x</option><option value="1" selected>National baseline · 1.00x</option><option value="1.12">Large metro · 1.12x</option><option value="1.22">Seattle / high-cost tech market · 1.22x</option><option value="1.32">Bay Area / NYC senior market · 1.32x</option></select></label>
+              <label>Industry multiplier<select id="salaryIndustry"><option value="0.92">Nonprofit / education · 0.92x</option><option value="1" selected>General private sector · 1.00x</option><option value="1.06">Government contractor · 1.06x</option><option value="1.14">Tech / software · 1.14x</option><option value="1.2">Specialized healthcare / pharma · 1.20x</option></select></label>
+              <button class="primary-btn full" id="calcSalaryBtn" type="button">Estimate range</button>
+            </article>
+            <article class="card salary-card" id="salaryOutput"></article>
+          </div>
+        </section>
+
+        <section class="view" id="profileView" aria-labelledby="profileHeading">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">identity + assets</p>
+              <h3 id="profileHeading">Profile + Resume Vault</h3>
+              <p>Save reusable application answers, skills, links, and resume files. Files are stored in this browser using IndexedDB.</p>
+            </div>
+          </div>
+          <div class="grid two-col">
+            <form id="profileForm" class="card form-grid">
+              <label>Full name<input name="name" placeholder="Your name" /></label>
+              <div class="field-pair"><label>Email<input name="email" type="email" /></label><label>Phone<input name="phone" /></label></div>
+              <label>Location<input name="location" placeholder="Bellingham, WA / Seattle / Remote" /></label>
+              <label>Target titles<input name="targetTitles" placeholder="Communications Specialist, Web Developer, 508 Specialist" /></label>
+              <label>Skills / keywords<textarea name="skills" rows="5" placeholder="508 compliance, NIH communications, social media, HTML, CSS, project management..."></textarea></label>
+              <label>Reusable profile links<textarea name="links" rows="3" placeholder="Portfolio, LinkedIn, GitHub..."></textarea></label>
+              <label>Resume text for matching<textarea name="resumeText" rows="8" placeholder="Paste your master resume text here. This stays local."></textarea></label>
+              <label>Common application answers<textarea name="commonAnswers" rows="7" placeholder="Work authorization, salary range, availability, preferred schedule, pronouns, references policy, etc."></textarea></label>
+              <button class="primary-btn full" type="submit">Save profile</button>
+            </form>
+            <article class="card">
+              <div class="card-head">
+                <div>
+                  <p class="eyebrow">documents</p>
+                  <h3>Resume / cover letter vault</h3>
+                </div>
+              </div>
+              <div class="upload-box">
+                <input id="fileInput" type="file" multiple accept=".pdf,.doc,.docx,.txt,.md,.rtf" />
+                <p>Upload resume versions, cover letters, or notes. Keep files under 5 MB each for smooth mobile storage.</p>
+              </div>
+              <div id="fileList" class="stack-list"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="view" id="recruitersView" aria-labelledby="recruitersHeading">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">outreach</p>
+              <h3 id="recruitersHeading">Recruiter Map</h3>
+              <p>Starter directory for agencies and search shortcuts. Add notes about which recruiters actually respond.</p>
+            </div>
+            <button class="primary-btn" id="addRecruiterBtn" type="button">Add agency</button>
+          </div>
+          <div class="toolbar">
+            <label class="search-label"><span>Search agencies</span><input id="recruiterSearch" type="search" placeholder="Creative, tech, remote, Seattle..." /></label>
+            <button class="secondary-btn" id="copyRecruiterPitchBtn" type="button">Copy outreach pitch</button>
+          </div>
+          <div id="recruiterList" class="job-card-list"></div>
+        </section>
+
+        <section class="view" id="settingsView" aria-labelledby="settingsHeading">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">security + portability</p>
+              <h3 id="settingsHeading">Backup + Settings</h3>
+              <p>Export your data, import it on another device, or create an encrypted backup file.</p>
+            </div>
+          </div>
+          <div class="grid two-col">
+            <article class="card form-grid">
+              <h3>Backups</h3>
+              <button class="primary-btn full" id="exportBtn" type="button">Export JSON backup</button>
+              <label>Password for encrypted backup<input id="backupPassword" type="password" autocomplete="new-password" placeholder="Optional but recommended" /></label>
+              <button class="secondary-btn full" id="exportEncryptedBtn" type="button">Export encrypted backup</button>
+              <label>Import backup<input id="importInput" type="file" accept=".json,.bunny" /></label>
+              <button class="danger-btn full" id="wipeBtn" type="button">Wipe local app data</button>
+            </article>
+            <article class="card form-grid">
+              <h3>Settings</h3>
+              <label>Days until “likely ghosted”<input id="ghostDays" type="number" min="3" max="90" /></label>
+              <label>Default follow-up days after applying<input id="followupDays" type="number" min="1" max="30" /></label>
+              <label><span class="checkbox-row"><input id="showConfetti" type="checkbox" /> Celebrate when offer status is selected</span></label>
+              <button class="primary-btn full" id="saveSettingsBtn" type="button">Save settings</button>
+              <div class="security-note">
+                <strong>Important limitation:</strong> this web app cannot directly type into job boards running in other tabs. Use the copy chips, prompt lab, and optional bookmarklet pattern in the README for safer form assistance.
+              </div>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div id="toast" role="status" aria-live="polite"></div>
+    <script src="app.js" type="module"></script>
+  </body>
+</html>

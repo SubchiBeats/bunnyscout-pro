@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BunnyScout Extension Dashboard</title>
+  <link rel="stylesheet" href="dashboard.css" />
+</head>
+<body>
+  <div class="shell">
+    <header class="masthead">
+      <div class="brand">
+        <div class="bunny" aria-hidden="true"><span></span></div>
+        <div>
+          <p class="eyebrow">Chrome / Edge extension</p>
+          <h1>BunnyScout Clipper + Autofill</h1>
+          <p>Keep a local autofill profile, review clipped jobs, and export anything you want to move into the BunnyScout web app.</p>
+        </div>
+      </div>
+      <div class="actions">
+        <button id="exportBtn" type="button">Export extension backup</button>
+        <label class="file-btn">Import backup<input id="importInput" type="file" accept="application/json,.json" hidden /></label>
+      </div>
+    </header>
+
+    <main class="grid">
+      <section class="card wide">
+        <div class="card-head">
+          <div>
+            <p class="eyebrow">settings</p>
+            <h2>Extension behavior</h2>
+          </div>
+          <button class="primary" id="saveSettingsBtn" type="button">Save settings</button>
+        </div>
+        <div class="form-grid">
+          <label>App URL for Open app
+            <input id="appUrl" placeholder="https://your-bunnyscout.netlify.app/index.html" />
+          </label>
+          <label>Max fields per autofill run
+            <input id="maxFieldsPerRun" type="number" min="20" max="250" step="10" />
+          </label>
+          <label class="check"><input id="previewBeforeFill" type="checkbox" /> Preview before filling</label>
+          <label class="check"><input id="highlightFilledFields" type="checkbox" /> Highlight filled fields</label>
+        </div>
+        <p class="note">BunnyScout skips passwords, SSNs, banking fields, file uploads, birth dates, EEO demographics, veteran/disability questions, and unknown sensitive fields.</p>
+      </section>
+
+      <section class="card wide">
+        <div class="card-head">
+          <div>
+            <p class="eyebrow">autofill profile</p>
+            <h2>Your reusable application answers</h2>
+          </div>
+          <button class="primary" id="saveProfileBtn" type="button">Save profile</button>
+        </div>
+        <form id="profileForm" class="form-grid profile-grid">
+          <label>First name<input name="firstName" autocomplete="given-name" /></label>
+          <label>Last name<input name="lastName" autocomplete="family-name" /></label>
+          <label>Email<input name="email" type="email" autocomplete="email" /></label>
+          <label>Phone<input name="phone" autocomplete="tel" /></label>
+          <label>Address line 1<input name="address1" autocomplete="address-line1" /></label>
+          <label>City<input name="city" autocomplete="address-level2" /></label>
+          <label>State<input name="state" autocomplete="address-level1" /></label>
+          <label>ZIP<input name="zip" autocomplete="postal-code" /></label>
+          <label>LinkedIn<input name="linkedin" placeholder="https://linkedin.com/in/..." /></label>
+          <label>Portfolio<input name="portfolio" placeholder="https://..." /></label>
+          <label>GitHub<input name="github" placeholder="https://github.com/..." /></label>
+          <label>Website<input name="website" placeholder="https://..." /></label>
+          <label>Current company<input name="currentCompany" /></label>
+          <label>Current title<input name="currentTitle" /></label>
+          <label>Desired salary<input name="desiredSalary" placeholder="$85,000" /></label>
+          <label>Years of relevant experience<input name="yearsExperience" placeholder="3" /></label>
+          <label>Authorized to work?
+            <select name="workAuthorization"><option value="yes">Yes</option><option value="no">No</option></select>
+          </label>
+          <label>Need sponsorship?
+            <select name="sponsorship"><option value="no">No</option><option value="yes">Yes</option></select>
+          </label>
+          <label class="full">Short professional summary<textarea name="summary" rows="4" placeholder="Brief truthful summary for open-ended application fields."></textarea></label>
+          <label class="full">Reusable cover-letter / additional-info text<textarea name="coverLetter" rows="7" placeholder="Optional reusable response. Keep it honest and easy to customize."></textarea></label>
+        </form>
+      </section>
+
+      <section class="card wide">
+        <div class="card-head">
+          <div>
+            <p class="eyebrow">clips</p>
+            <h2>Saved job clips</h2>
+          </div>
+          <div class="actions small">
+            <button id="copyAllBtn" type="button">Copy all as BunnyScout JSON</button>
+            <button id="clearClipsBtn" type="button">Clear clips</button>
+          </div>
+        </div>
+        <div id="clipsList" class="clips"></div>
+      </section>
+    </main>
+  </div>
+  <script src="dashboard.js"></script>
+</body>
+</html>
